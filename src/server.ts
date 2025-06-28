@@ -1,7 +1,5 @@
 import { routeAgentRequest, type Schedule } from "agents";
 
-import { unstable_getSchedulePrompt } from "agents/schedule";
-
 import { AIChatAgent } from "agents/ai-chat-agent";
 import {
   createDataStreamResponse,
@@ -13,6 +11,7 @@ import {
 import { openai } from "@ai-sdk/openai";
 import { processToolCalls } from "./utils";
 import { tools, executions } from "./tools";
+import { getSystemPrompt, getTaskExecutionMessage } from "./prompts";
 // import { env } from "cloudflare:workers";
 
 const model = openai(process.env.OPENAI_MODEL ?? "gpt-4.1-mini");
@@ -45,11 +44,12 @@ export class Chat extends AIChatAgent<Env> {
       ...this.mcp.unstable_getAITools(),
     };
 
+    // Process any pending tool calls from previous messages
+    // This handles human-in-the-loop confirmations for tools
+
     // Create a streaming response that handles both text and tool outputs
     const dataStreamResponse = createDataStreamResponse({
       execute: async (dataStream) => {
-        // Process any pending tool calls from previous messages
-        // This handles human-in-the-loop confirmations for tools
         const processedMessages = await processToolCalls({
           messages: this.messages,
           dataStream,
@@ -60,12 +60,7 @@ export class Chat extends AIChatAgent<Env> {
         // Stream the AI response
         const result = streamText({
           model,
-          system: `You are a helpful assistant that can do various tasks... 
-
-${unstable_getSchedulePrompt({ date: new Date() })}
-
-If the user asks to schedule a task, use the schedule tool to schedule the task.
-`,
+          system: getSystemPrompt(),
           messages: processedMessages,
           tools: allTools,
           onFinish: async (args) => {
@@ -93,7 +88,7 @@ If the user asks to schedule a task, use the schedule tool to schedule the task.
       {
         id: generateId(),
         role: "user",
-        content: `Running scheduled task: ${description}`,
+        content: getTaskExecutionMessage(description),
         createdAt: new Date(),
       },
     ]);
