@@ -3,6 +3,11 @@ import { useAgent } from "agents/react";
 import { useAgentChat } from "agents/ai-react";
 import type { Message } from "@ai-sdk/react";
 import type { tools } from "./tools";
+import type { 
+  Theme, 
+  ToolsRequiringConfirmation, 
+  OpenAICheckResponse,
+} from "./types";
 
 // Component imports
 import { Button } from "@/components/button/Button";
@@ -26,15 +31,15 @@ import {
 
 // List of tools that require human confirmation
 // NOTE: this should match the keys in the executions object in tools.ts
-const toolsRequiringConfirmation: (keyof typeof tools)[] = [
+const toolsRequiringConfirmation: ToolsRequiringConfirmation = [
   "getWeatherInformation",
 ];
 
 export default function Chat() {
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
+  const [theme, setTheme] = useState<Theme>(() => {
     // Check localStorage first, default to dark if not found
     const savedTheme = localStorage.getItem("theme");
-    return (savedTheme as "dark" | "light") || "dark";
+    return (savedTheme as Theme) || "dark";
   });
   const [showDebug, setShowDebug] = useState(false);
   const [textareaHeight, setTextareaHeight] = useState("auto");
@@ -95,7 +100,8 @@ export default function Chat() {
     m.parts?.some(
       (part) =>
         part.type === "tool-invocation" &&
-        part.toolInvocation.state === "call" &&
+        part.toolInvocation?.state === "call" &&
+        part.toolInvocation.toolName &&
         toolsRequiringConfirmation.includes(
           part.toolInvocation.toolName as keyof typeof tools
         )
@@ -376,7 +382,7 @@ export default function Chat() {
 }
 
 const hasOpenAiKeyPromise = fetch("/check-open-ai-key").then((res) =>
-  res.json<{ success: boolean }>()
+  res.json<OpenAICheckResponse>()
 );
 
 function HasOpenAIKey() {
