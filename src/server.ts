@@ -15,7 +15,7 @@ import { processToolCalls } from "./utils";
 import { tools, executions } from "./tools";
 // import { env } from "cloudflare:workers";
 
-const model = openai("gpt-4o-2024-11-20");
+const model = openai(process.env.OPENAI_MODEL ?? "gpt-4.1-mini");
 // Cloudflare AI Gateway
 // const openai = createOpenAI({
 //   apiKey: env.OPENAI_API_KEY,
@@ -57,7 +57,7 @@ export class Chat extends AIChatAgent<Env> {
           executions,
         });
 
-        // Stream the AI response using GPT-4
+        // Stream the AI response
         const result = streamText({
           model,
           system: `You are a helpful assistant that can do various tasks... 
