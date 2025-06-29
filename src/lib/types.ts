@@ -1,10 +1,4 @@
-import type { tools } from "./tools";
-import type { Message } from "@ai-sdk/react";
-
-/**
- * Represents the theme options for the application.
- */
-export type Theme = "dark" | "light";
+import type { tools } from "../tools";
 
 /**
  * Type for the array of tool names that require user confirmation before execution.
@@ -25,3 +19,5 @@ export interface OpenAICheckResponse {
 export interface ChatProps {
   // Add any props if needed in the future
 }
+
+export type ToolResult = { toolCallId: string; result: string };

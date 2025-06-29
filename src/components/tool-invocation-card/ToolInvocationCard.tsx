@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Robot, CaretDown } from "@phosphor-icons/react";
+import { RobotIcon, CaretDownIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/button/Button";
 import { Card } from "@/components/card/Card";
 import { Tooltip } from "@/components/tooltip/Tooltip";
 import { APPROVAL } from "@/shared";
+import { useAddToolResult } from "@/store/useChatStore";
+import { MessagePartType, ToolInvocationState } from "@/lib/enums";
 
 interface ToolInvocation {
   toolName: string;
   toolCallId: string;
-  state: "call" | "result" | "partial-call";
+  state: ToolInvocationState;
   step?: number;
   args: Record<string, unknown>;
   result?: {
@@ -20,16 +22,15 @@ interface ToolInvocationCardProps {
   toolInvocation: ToolInvocation;
   toolCallId: string;
   needsConfirmation: boolean;
-  addToolResult: (args: { toolCallId: string; result: string }) => void;
 }
 
 export function ToolInvocationCard({
   toolInvocation,
   toolCallId,
   needsConfirmation,
-  addToolResult,
 }: ToolInvocationCardProps) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const addToolResult = useAddToolResult();
 
   return (
     <Card
@@ -45,15 +46,15 @@ export function ToolInvocationCard({
         <div
           className={`${needsConfirmation ? "bg-[#F48120]/10" : "bg-[#F48120]/5"} p-1.5 rounded-full flex-shrink-0`}
         >
-          <Robot size={16} className="text-[#F48120]" />
+          <RobotIcon size={16} className="text-[#F48120]" />
         </div>
         <h4 className="font-medium flex items-center gap-2 flex-1 text-left">
           {toolInvocation.toolName}
-          {!needsConfirmation && toolInvocation.state === "result" && (
+          {!needsConfirmation && toolInvocation.state === ToolInvocationState.RESULT && (
             <span className="text-xs text-[#F48120]/70">✓ Completed</span>
           )}
         </h4>
-        <CaretDown
+        <CaretDownIcon
           size={16}
           className={`text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
         />
@@ -75,7 +76,7 @@ export function ToolInvocationCard({
             </pre>
           </div>
 
-          {needsConfirmation && toolInvocation.state === "call" && (
+          {needsConfirmation && toolInvocation.state === ToolInvocationState.CALL && (
             <div className="flex gap-2 justify-end">
               <Button
                 variant="primary"
@@ -106,7 +107,7 @@ export function ToolInvocationCard({
             </div>
           )}
 
-          {!needsConfirmation && toolInvocation.state === "result" && (
+          {!needsConfirmation && toolInvocation.state === ToolInvocationState.RESULT && (
             <div className="mt-3 border-t border-[#F48120]/10 pt-3">
               <h5 className="text-xs font-medium mb-1 text-muted-foreground">
                 Result:
@@ -118,7 +119,7 @@ export function ToolInvocationCard({
                     return result.content
                       .map((item: { type: string; text: string }) => {
                         if (
-                          item.type === "text" &&
+                          item.type === MessagePartType.TEXT &&
                           item.text.startsWith("\n~ Page URL:")
                         ) {
                           const lines = item.text.split("\n").filter(Boolean);
