@@ -5,6 +5,7 @@ import { ThemeMode } from '@/lib/enums';
 
 interface ChatState {
   // State
+  title: string;
   theme: ThemeMode;
   showDebug: boolean;
   messages: Message[];
@@ -17,20 +18,17 @@ interface ChatState {
   toggleTheme: () => void;
   toggleDebug: () => void;
   setShowDebug: (show: boolean) => void;
-  setMessages: (messages: Message[]) => void;
-  setInput: (input: string) => void;
   setPendingToolCallConfirmation: (pending: boolean) => void;
-  addMessage: (message: Message) => void;
-  clearMessages: () => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   stop: () => void;
   clearHistory: () => void;
   setAgentChat: (agent: any, agentChat: any) => void;
+  suggestions: string[];
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
   setAgentChat: (agent, agentChat) => set({ agent, agentChat }),
   // Initial state
+  title: "AI Chat Agent",
   theme: (() => {
     const savedTheme = localStorage.getItem("theme");
     return (savedTheme as ThemeMode) || ThemeMode.DARK;
@@ -41,7 +39,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
   pendingToolCallConfirmation: false,
   agent: null,
   agentChat: null,
-
+  suggestions: [
+    'Weather information for any city',
+    'Local time in different locations'
+  ],
   // Actions
   setTheme: (theme: ThemeMode) => {
     set({ theme });
@@ -63,28 +64,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set({ showDebug: show });
   },
 
-  setMessages: (messages: Message[]) => {
-    set({ messages });
-  },
-
-  setInput: (input: string) => {
-    set({ input });
-  },
-
   setPendingToolCallConfirmation: (pending: boolean) => {
     set({ pendingToolCallConfirmation: pending });
-  },
-
-  addMessage: (message: Message) => {
-    set((state: ChatState) => ({ messages: [...state.messages, message] }));
-  },
-
-  clearMessages: () => {
-    set({ messages: [] });
-  },
-
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    set({ input: e.target.value });
   },
 
   toggleTheme: () => {
@@ -113,11 +94,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (agentChat?.clearHistory) {
       agentChat.clearHistory();
     }
-    set({ messages: [], input: '' });
   },
 }));
 
 // Selectors
+export const useTitle = () => useChatStore((state) => state.title);
+export const useSuggestions = () => useChatStore((state) => state.suggestions);
 export const useSetAgentChat = () => useChatStore((state) => state.setAgentChat);
 export const useTheme = () => useChatStore((state) => state.theme);
 export const useShowDebug = () => useChatStore((state) => state.showDebug);

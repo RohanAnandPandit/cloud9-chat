@@ -3,12 +3,8 @@ import { Button } from "@/components/button/Button";
 import { Toggle } from "@/components/toggle/Toggle";
 import { useChatStore } from "@/store/useChatStore";
 
-type ChatHeaderProps = {
-  title: string;
-};
-
-export function ChatHeader({ title }: ChatHeaderProps) {
-  const { toggleTheme, showDebug, toggleDebug, clearHistory, theme } = useChatStore();
+export function ChatHeader() {
+  const { toggleTheme, showDebug, toggleDebug, clearHistory, theme, title } = useChatStore();
 
   return (
     <div className="px-4 py-3 border-b border-neutral-300 dark:border-neutral-800 flex items-center gap-3 sticky top-0 z-10">
@@ -19,7 +15,7 @@ export function ChatHeader({ title }: ChatHeaderProps) {
           className="text-[#F48120]"
           data-icon="agents"
         >
-          <title>Cloudflare Agents</title>
+          <title>{title}</title>
           <symbol id="ai:local:agents" viewBox="0 0 80 79">
             <path
               fill="currentColor"
