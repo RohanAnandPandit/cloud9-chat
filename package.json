@@ -23,7 +23,7 @@
     "@biomejs/biome": "^2.0.4",
     "@cloudflare/vite-plugin": "1.7.4",
     "@cloudflare/vitest-pool-workers": "^0.8.43",
-    "@cloudflare/workers-types": "^4.20250620.0",
+    "@cloudflare/workers-types": "^4.20250628.0",
     "@tailwindcss/vite": "^4.1.10",
     "@types/node": "^24.0.6",
     "@types/react": "^19.1.8",
@@ -56,6 +56,7 @@
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.3.1",
-    "zod": "^3.25.67"
+    "zod": "^3.25.67",
+    "zustand": "^5.0.6"
   }
 }

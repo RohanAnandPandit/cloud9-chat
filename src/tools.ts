@@ -8,6 +8,7 @@ import { z } from "zod";
 import type { Chat } from "./server";
 import { getCurrentAgent } from "agents";
 import { unstable_scheduleSchema } from "agents/schedule";
+import { ScheduleWhenType } from "./lib/enums";
 
 /**
  * Weather information tool that requires human confirmation
@@ -29,7 +30,7 @@ const getLocalTime = tool({
   description: "get the local time for a specified location",
   parameters: z.object({ location: z.string() }),
   execute: async ({ location }) => {
-    console.log(`Getting local time for ${location}`);
+    console.debug(`Getting local time for ${location}`);
     return "10am";
   },
 });
@@ -44,15 +45,15 @@ const scheduleTask = tool({
     function throwError(msg: string): string {
       throw new Error(msg);
     }
-    if (when.type === "no-schedule") {
+    if (when.type === ScheduleWhenType.NO_SCHEDULE) {
       return "Not a valid schedule input";
     }
     const input =
-      when.type === "scheduled"
+      when.type === ScheduleWhenType.SCHEDULED
         ? when.date // scheduled
-        : when.type === "delayed"
+        : when.type === ScheduleWhenType.DELAYED
           ? when.delayInSeconds // delayed
-          : when.type === "cron"
+          : when.type === ScheduleWhenType.CRON
             ? when.cron // cron
             : throwError("not a valid schedule input");
     try {
@@ -129,7 +130,7 @@ export const tools = {
  */
 export const executions = {
   getWeatherInformation: async ({ city }: { city: string }) => {
-    console.log(`Getting weather information for ${city}`);
+    console.debug(`Getting weather information for ${city}`);
     return `The weather in ${city} is sunny`;
   },
 };
