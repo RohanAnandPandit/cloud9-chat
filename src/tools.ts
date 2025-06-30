@@ -130,7 +130,7 @@ export const tools = {
  */
 export const executions = {
   getWeatherInformation: async ({ city }: { city: string }) => {
-    console.log(`Getting weather information for ${city}`);
+    console.debug(`Getting weather information for ${city}`);
     return `The weather in ${city} is sunny`;
   },
 };
