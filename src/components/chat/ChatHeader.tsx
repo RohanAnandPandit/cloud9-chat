@@ -3,7 +3,11 @@ import { Button } from "@/components/button/Button";
 import { Toggle } from "@/components/toggle/Toggle";
 import { useChatStore } from "@/store/useChatStore";
 
-export function ChatHeader() {
+type ChatHeaderProps = {
+  title: string;
+};
+
+export function ChatHeader({ title }: ChatHeaderProps) {
   const { toggleTheme, showDebug, toggleDebug, clearHistory, theme } = useChatStore();
 
   return (
@@ -27,7 +31,7 @@ export function ChatHeader() {
       </div>
 
       <div className="flex-1">
-        <h2 className="font-semibold text-base">AI Chat Agent</h2>
+        <h2 className="font-semibold text-base">{title}</h2>
       </div>
 
       <div className="flex items-center gap-2 mr-2">

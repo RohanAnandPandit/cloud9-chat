@@ -55,7 +55,7 @@ export default function Chat() {
     <div className="h-[100vh] w-full p-4 flex justify-center items-center bg-fixed overflow-hidden">
       <HasOpenAIKey />
       <div className="h-[calc(100vh-2rem)] w-full mx-auto max-w-lg flex flex-col shadow-xl rounded-md overflow-hidden relative border border-neutral-300 dark:border-neutral-800">
-        <ChatHeader />
+        <ChatHeader title="AI Chat Agent" />
         <MessageList messagesEndRef={messagesEndRef} />
         <div ref={messagesEndRef} />
         <InputArea />
