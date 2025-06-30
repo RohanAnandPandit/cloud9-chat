@@ -1,7 +1,8 @@
+import type { OpenAICheckResponse } from "@/lib/types";
 import { use } from "react";
 
 const hasOpenAiKeyPromise = fetch("/check-open-ai-key").then((res) =>
-  res.json<{ success: boolean }>()
+  res.json<OpenAICheckResponse>()
 );
 
 export function HasOpenAIKey() {
