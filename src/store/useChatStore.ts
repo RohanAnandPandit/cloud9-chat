@@ -9,12 +9,10 @@ interface ChatState {
   theme: ThemeMode;
   showDebug: boolean;
   messages: Message[];
-  input: string;
   pendingToolCallConfirmation: boolean;
   agent: any;
   agentChat: any;
   // Actions
-  setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
   toggleDebug: () => void;
   setShowDebug: (show: boolean) => void;
@@ -35,7 +33,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
   })(),
   showDebug: false,
   messages: [],
-  input: '',
   pendingToolCallConfirmation: false,
   agent: null,
   agentChat: null,
@@ -44,17 +41,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
     'Local time in different locations'
   ],
   // Actions
-  setTheme: (theme: ThemeMode) => {
-    set({ theme });
-    localStorage.setItem("theme", theme);
-    if (theme === ThemeMode.DARK) {
-      document.documentElement.classList.add(ThemeMode.DARK);
-      document.documentElement.classList.remove(ThemeMode.LIGHT);
-    } else {
-      document.documentElement.classList.remove(ThemeMode.DARK);
-      document.documentElement.classList.add(ThemeMode.LIGHT);
-    }
-  },
 
   toggleDebug: () => {
     set((state: ChatState) => ({ showDebug: !state.showDebug }));
