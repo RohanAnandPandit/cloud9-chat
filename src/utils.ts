@@ -128,3 +128,18 @@ export async function processToolCalls<
 //     return typeof maybeTool.execute !== "function";
 //   }) as string[];
 // }
+
+
+export async function fetchWeather({ query }: { query: string }) {
+  console.debug(`Getting weather information for ${query}`);
+  const url = `https://api.weatherapi.com/v1/current.json?q=${query}&key=${process.env.WEATHER_API_KEY}&aqi=no`;
+  const response = await fetch(url);
+  try {
+    const data: any = await response.json();
+    console.debug(data);
+    return `The weather in ${query} is ${data.current.condition.text.toLowerCase()}`;
+  } catch (error) {
+    console.error("Error getting weather information", response.text());
+    return `Error getting weather information for ${query}: ${response.text()}`;
+  }
+}
