@@ -27,11 +27,17 @@ const getWeatherInformation = tool({
  * This is suitable for low-risk operations that don't need oversight
  */
 const getLocalTime = tool({
-  description: "get the local time for a specified location",
-  parameters: z.object({ location: z.string() }),
-  execute: async ({ location }) => {
-    console.debug(`Getting local time for ${location}`);
-    return "10am";
+  description: "Get the local time for a specified IANA timezone (e.g. Europe/London, America/New_York, Asia/Tokyo, Australia/Sydney, America/Los_Angeles)",
+  parameters: z.object({ timezone: z.string().describe("IANA timezone string, e.g. Europe/London") }),
+  execute: async ({ timezone }) => {
+    console.debug(`Getting local time for timezone: ${timezone}`);
+    try {
+      const now = new Date();
+      const localTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: timezone });
+      return `The local time in ${timezone} is ${localTime}`;
+    } catch (e) {
+      return `Invalid timezone. Please provide a valid IANA timezone string (e.g. Europe/London, America/New_York, Asia/Tokyo).`;
+    }
   },
 });
 
