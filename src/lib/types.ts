@@ -16,6 +16,6 @@ export interface OpenAICheckResponse {
 /**
  * Props for the Chat component
  */
-export type ChatProps = {}
+export type ChatProps = {};
 
 export type ToolResult = { toolCallId: string; result: string };
