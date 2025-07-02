@@ -18,8 +18,8 @@ export function WelcomeMessage() {
             Start a conversation with your AI assistant. Try asking about:
           </p>
           <ul className="text-sm text-left space-y-2">
-            {suggestions.map((suggestion: string, index: number) => (
-              <li key={index} className="flex items-center gap-2">
+            {suggestions.map((suggestion: string) => (
+              <li key={suggestion} className="flex items-center gap-2">
                 <span className="text-[#F48120]">•</span>
                 <span>{suggestion}</span>
               </li>

@@ -41,7 +41,7 @@ export function MessageItem({
           <div>
             <div>
               {message.parts?.map((part, i) => (
-                <div key={i}>
+                <div key={`part-${i}`}>
                   <MessageContent
                     part={part}
                     isUser={isUser}

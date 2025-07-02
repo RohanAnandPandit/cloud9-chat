@@ -45,7 +45,7 @@ const getLocalTime = tool({
         timeZone: timezone,
       });
       return `The local time in ${timezone} is ${localTime}`;
-    } catch (e) {
+    } catch (_e) {
       return `Invalid timezone. Please provide a valid IANA timezone string (e.g. Europe/London, America/New_York, Asia/Tokyo).`;
     }
   },

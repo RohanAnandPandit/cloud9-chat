@@ -4,8 +4,10 @@ import { ToolInvocationCard } from "@/components/tool-invocation-card/ToolInvoca
 import { toolsRequiringConfirmation } from "@/shared";
 import { MessagePartType } from "@/lib/enums";
 
+import type { Message } from "@ai-sdk/react";
+
 interface MessageContentProps {
-  part: any;
+  part: Message["parts"][number];
   isUser: boolean;
   showDebug: boolean;
 }
