@@ -9,6 +9,7 @@ import {
 } from "ai";
 import type { z } from "zod";
 import { APPROVAL } from "./shared";
+import { MessagePartType, ToolInvocationState } from "./lib/enums";
 
 function isValidToolName<K extends PropertyKey, T extends object>(
   key: K,
@@ -57,13 +58,13 @@ export async function processToolCalls<
   const processedParts = await Promise.all(
     parts.map(async (part) => {
       // Only process tool invocations parts
-      if (part.type !== "tool-invocation") return part;
+      if (part.type !== MessagePartType.TOOL_INVOCATION) return part;
 
       const { toolInvocation } = part;
       const toolName = toolInvocation.toolName;
 
       // Only continue if we have an execute function for the tool (meaning it requires confirmation) and it's in a 'result' state
-      if (!(toolName in executions) || toolInvocation.state !== "result")
+      if (!(toolName in executions) || toolInvocation.state !== ToolInvocationState.RESULT)
         return part;
 
       let result: unknown;
@@ -72,7 +73,7 @@ export async function processToolCalls<
         // Get the tool and check if the tool has an execute function.
         if (
           !isValidToolName(toolName, executions) ||
-          toolInvocation.state !== "result"
+          toolInvocation.state !== ToolInvocationState.RESULT
         ) {
           return part;
         }
@@ -127,3 +128,18 @@ export async function processToolCalls<
 //     return typeof maybeTool.execute !== "function";
 //   }) as string[];
 // }
+
+
+export async function fetchWeather({ query }: { query: string }) {
+  console.debug(`Getting weather information for ${query}`);
+  const url = `https://api.weatherapi.com/v1/current.json?q=${query}&key=${process.env.WEATHER_API_KEY}&aqi=no`;
+  const response = await fetch(url);
+  try {
+    const data: any = await response.json();
+    console.debug(data);
+    return `The weather in ${query} is ${data.current.condition.text.toLowerCase()}`;
+  } catch (error) {
+    console.error("Error getting weather information", response.text());
+    return `Error getting weather information for ${query}: ${response.text()}`;
+  }
+}

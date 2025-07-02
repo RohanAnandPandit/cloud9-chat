@@ -9,15 +9,16 @@ import type { Chat } from "./server";
 import { getCurrentAgent } from "agents";
 import { unstable_scheduleSchema } from "agents/schedule";
 import { ScheduleWhenType } from "./lib/enums";
+import { fetchWeather } from "./utils";
 
 /**
  * Weather information tool that requires human confirmation
  * When invoked, this will present a confirmation dialog to the user
  * The actual implementation is in the executions object below
  */
-const getWeatherInformation = tool({
-  description: "show the weather in a given city to the user",
-  parameters: z.object({ city: z.string() }),
+const getWeatherInformationTool = tool({
+  description: "show the weather in a given location to the user",
+  parameters: z.object({ query: z.string().describe("Location to get weather information for") }),
   // Omitting execute function makes this tool require human confirmation
 });
 
@@ -27,11 +28,17 @@ const getWeatherInformation = tool({
  * This is suitable for low-risk operations that don't need oversight
  */
 const getLocalTime = tool({
-  description: "get the local time for a specified location",
-  parameters: z.object({ location: z.string() }),
-  execute: async ({ location }) => {
-    console.debug(`Getting local time for ${location}`);
-    return "10am";
+  description: "Get the local time for a specified IANA timezone (e.g. Europe/London, America/New_York, Asia/Tokyo, Australia/Sydney, America/Los_Angeles)",
+  parameters: z.object({ timezone: z.string().describe("IANA timezone string, e.g. Europe/London") }),
+  execute: async ({ timezone }) => {
+    console.debug(`Getting local time for timezone: ${timezone}`);
+    try {
+      const now = new Date();
+      const localTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: timezone });
+      return `The local time in ${timezone} is ${localTime}`;
+    } catch (e) {
+      return `Invalid timezone. Please provide a valid IANA timezone string (e.g. Europe/London, America/New_York, Asia/Tokyo).`;
+    }
   },
 });
 
@@ -115,7 +122,7 @@ const cancelScheduledTask = tool({
  * These will be provided to the AI model to describe available capabilities
  */
 export const tools = {
-  getWeatherInformation,
+  getWeatherInformation: getWeatherInformationTool,
   getLocalTime,
   scheduleTask,
   getScheduledTasks,
@@ -129,8 +136,5 @@ export const tools = {
  * NOTE: keys below should match toolsRequiringConfirmation in app.tsx
  */
 export const executions = {
-  getWeatherInformation: async ({ city }: { city: string }) => {
-    console.debug(`Getting weather information for ${city}`);
-    return `The weather in ${city} is sunny`;
-  },
+  getWeatherInformation: fetchWeather,
 };

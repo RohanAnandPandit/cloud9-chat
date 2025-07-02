@@ -1,4 +1,6 @@
 OPENAI_API_KEY=sk-proj-1234567890
 OPENAI_MODEL=gpt-
+# Visit https://www.weatherapi.com/docs/ to get an API key
+WEATHER_API_KEY=
 # Optional - Cloudflare AI Gateway https://developers.cloudflare.com/ai-gateway/
 # GATEWAY_BASE_URL=https://gateway.ai.cloudflare.com/v1/..
