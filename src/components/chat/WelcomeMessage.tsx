@@ -2,9 +2,7 @@ import { Card } from "@/components/card/Card";
 import { useTitle, useSuggestions } from "@/store/useChatStore";
 import { RobotIcon } from "@phosphor-icons/react";
 
-
 export function WelcomeMessage() {
-
   const title = useTitle();
   const suggestions = useSuggestions();
 

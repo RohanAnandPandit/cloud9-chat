@@ -1,10 +1,10 @@
 import { PaperPlaneTiltIcon, StopIcon } from "@phosphor-icons/react";
 import { Textarea } from "@/components/textarea/Textarea";
-import { 
-  useInput, 
-  useIsLoading, 
+import {
+  useInput,
+  useIsLoading,
   usePendingToolCallConfirmation,
-  useChatStore
+  useChatStore,
 } from "@/store/useChatStore";
 import { useState } from "react";
 
@@ -12,9 +12,7 @@ export function InputArea() {
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const isLoading = useIsLoading();
   const pendingToolCallConfirmation = usePendingToolCallConfirmation();
-  const { 
-    agentChat,
-  } = useChatStore();
+  const { agentChat } = useChatStore();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
@@ -31,7 +29,7 @@ export function InputArea() {
     e.target.style.height = `${e.target.scrollHeight}px`;
     setTextareaHeight(`${e.target.scrollHeight}px`);
   };
-  
+
   const handleLocalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     agentChat?.handleSubmit(e);
@@ -73,7 +71,9 @@ export function InputArea() {
               <button
                 type="submit"
                 className="inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full p-1.5 h-fit border border-neutral-200 dark:border-neutral-800"
-                disabled={pendingToolCallConfirmation || !agentChat?.input.trim()}
+                disabled={
+                  pendingToolCallConfirmation || !agentChat?.input.trim()
+                }
                 aria-label="Send message"
               >
                 <PaperPlaneTiltIcon size={16} weight="fill" />

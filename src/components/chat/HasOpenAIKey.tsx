@@ -35,10 +35,24 @@ export function HasOpenAIKey() {
                   Missing OpenAI API Key
                 </h3>
                 <p className="text-sm text-red-700 dark:text-red-300 mt-1">
-                  Please set the <code className="bg-red-100 dark:bg-red-900/50 px-1 py-0.5 rounded">OPENAI_API_KEY</code> environment variable in your <code className="bg-red-100 dark:bg-red-900/50 px-1 py-0.5 rounded">.env</code> file.
+                  Please set the{" "}
+                  <code className="bg-red-100 dark:bg-red-900/50 px-1 py-0.5 rounded">
+                    OPENAI_API_KEY
+                  </code>{" "}
+                  environment variable in your{" "}
+                  <code className="bg-red-100 dark:bg-red-900/50 px-1 py-0.5 rounded">
+                    .env
+                  </code>{" "}
+                  file.
                 </p>
                 <div className="mt-2 text-xs text-red-600 dark:text-red-400">
-                  <p>Add this to your <code className="bg-red-100 dark:bg-red-950/50 px-1 py-0.5 rounded">.env</code> file:</p>
+                  <p>
+                    Add this to your{" "}
+                    <code className="bg-red-100 dark:bg-red-950/50 px-1 py-0.5 rounded">
+                      .env
+                    </code>{" "}
+                    file:
+                  </p>
                   <pre className="mt-1 p-2 bg-red-50 dark:bg-red-950/50 rounded overflow-x-auto">
                     <code>OPENAI_API_KEY=your_api_key_here</code>
                   </pre>

@@ -4,7 +4,8 @@ import { Toggle } from "@/components/toggle/Toggle";
 import { useChatStore } from "@/store/useChatStore";
 
 export function ChatHeader() {
-  const { toggleTheme, showDebug, toggleDebug, clearHistory, theme, title } = useChatStore();
+  const { toggleTheme, showDebug, toggleDebug, clearHistory, theme, title } =
+    useChatStore();
 
   return (
     <div className="px-4 py-3 border-b border-neutral-300 dark:border-neutral-800 flex items-center gap-3 sticky top-0 z-10">
@@ -31,9 +32,9 @@ export function ChatHeader() {
       </div>
 
       <div className="flex items-center gap-2 mr-2">
-        <BugIcon size={20} weight="fill"/>
-        <Toggle 
-          toggled={showDebug} 
+        <BugIcon size={20} weight="fill" />
+        <Toggle
+          toggled={showDebug}
           onClick={toggleDebug}
           aria-label="Toggle debug mode"
         />
@@ -46,7 +47,11 @@ export function ChatHeader() {
         onClick={toggleTheme}
         className="rounded-full h-9 w-9"
       >
-        {theme === "dark" ? <SunIcon size={20} weight="fill" /> : <MoonIcon size={20} weight="fill" />}
+        {theme === "dark" ? (
+          <SunIcon size={20} weight="fill" />
+        ) : (
+          <MoonIcon size={20} weight="fill" />
+        )}
       </Button>
 
       <Button

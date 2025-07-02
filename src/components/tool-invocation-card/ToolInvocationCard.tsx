@@ -50,9 +50,10 @@ export function ToolInvocationCard({
         </div>
         <h4 className="font-medium flex items-center gap-2 flex-1 text-left">
           {toolInvocation.toolName}
-          {!needsConfirmation && toolInvocation.state === ToolInvocationState.RESULT && (
-            <span className="text-xs text-[#F48120]/70">✓ Completed</span>
-          )}
+          {!needsConfirmation &&
+            toolInvocation.state === ToolInvocationState.RESULT && (
+              <span className="text-xs text-[#F48120]/70">✓ Completed</span>
+            )}
         </h4>
         <CaretDownIcon
           size={16}
@@ -76,68 +77,71 @@ export function ToolInvocationCard({
             </pre>
           </div>
 
-          {needsConfirmation && toolInvocation.state === ToolInvocationState.CALL && (
-            <div className="flex gap-2 justify-end">
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() =>
-                  addToolResult({
-                    toolCallId,
-                    result: APPROVAL.NO,
-                  })
-                }
-              >
-                Reject
-              </Button>
-              <Tooltip content={"Accept action"}>
+          {needsConfirmation &&
+            toolInvocation.state === ToolInvocationState.CALL && (
+              <div className="flex gap-2 justify-end">
                 <Button
                   variant="primary"
                   size="sm"
                   onClick={() =>
                     addToolResult({
                       toolCallId,
-                      result: APPROVAL.YES,
+                      result: APPROVAL.NO,
                     })
                   }
                 >
-                  Approve
+                  Reject
                 </Button>
-              </Tooltip>
-            </div>
-          )}
-
-          {!needsConfirmation && toolInvocation.state === ToolInvocationState.RESULT && (
-            <div className="mt-3 border-t border-[#F48120]/10 pt-3">
-              <h5 className="text-xs font-medium mb-1 text-muted-foreground">
-                Result:
-              </h5>
-              <pre className="bg-background/80 p-2 rounded-md text-xs overflow-auto whitespace-pre-wrap break-words max-w-[450px]">
-                {(() => {
-                  const result = toolInvocation.result;
-                  if (typeof result === "object" && result.content) {
-                    return result.content
-                      .map((item: { type: string; text: string }) => {
-                        if (
-                          item.type === MessagePartType.TEXT &&
-                          item.text.startsWith("\n~ Page URL:")
-                        ) {
-                          const lines = item.text.split("\n").filter(Boolean);
-                          return lines
-                            .map(
-                              (line: string) => `- ${line.replace("\n~ ", "")}`
-                            )
-                            .join("\n");
-                        }
-                        return item.text;
+                <Tooltip content={"Accept action"}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() =>
+                      addToolResult({
+                        toolCallId,
+                        result: APPROVAL.YES,
                       })
-                      .join("\n");
-                  }
-                  return JSON.stringify(result, null, 2);
-                })()}
-              </pre>
-            </div>
-          )}
+                    }
+                  >
+                    Approve
+                  </Button>
+                </Tooltip>
+              </div>
+            )}
+
+          {!needsConfirmation &&
+            toolInvocation.state === ToolInvocationState.RESULT && (
+              <div className="mt-3 border-t border-[#F48120]/10 pt-3">
+                <h5 className="text-xs font-medium mb-1 text-muted-foreground">
+                  Result:
+                </h5>
+                <pre className="bg-background/80 p-2 rounded-md text-xs overflow-auto whitespace-pre-wrap break-words max-w-[450px]">
+                  {(() => {
+                    const result = toolInvocation.result;
+                    if (typeof result === "object" && result.content) {
+                      return result.content
+                        .map((item: { type: string; text: string }) => {
+                          if (
+                            item.type === MessagePartType.TEXT &&
+                            item.text.startsWith("\n~ Page URL:")
+                          ) {
+                            const lines = item.text.split("\n").filter(Boolean);
+                            return lines
+                              .map(
+                                (line: string) =>
+                                  `- ${line.replace("\n~ ", "")}`
+                              )
+                              .join("\n");
+                          }
+                          return item.text;
+                        })
+                        .join("\n");
+                    }
+                    return JSON.stringify(result, null, 2);
+                  })()}
+                </pre>
+              </div>
+            )}
         </div>
       </div>
     </Card>

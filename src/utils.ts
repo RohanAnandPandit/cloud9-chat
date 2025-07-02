@@ -64,7 +64,10 @@ export async function processToolCalls<
       const toolName = toolInvocation.toolName;
 
       // Only continue if we have an execute function for the tool (meaning it requires confirmation) and it's in a 'result' state
-      if (!(toolName in executions) || toolInvocation.state !== ToolInvocationState.RESULT)
+      if (
+        !(toolName in executions) ||
+        toolInvocation.state !== ToolInvocationState.RESULT
+      )
         return part;
 
       let result: unknown;
@@ -128,7 +131,6 @@ export async function processToolCalls<
 //     return typeof maybeTool.execute !== "function";
 //   }) as string[];
 // }
-
 
 export async function fetchWeather({ query }: { query: string }) {
   console.debug(`Getting weather information for ${query}`);

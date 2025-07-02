@@ -1,7 +1,6 @@
-import { create } from 'zustand';
-import type { Message } from '@ai-sdk/react';
-import { ThemeMode } from '@/lib/enums';
-
+import { create } from "zustand";
+import type { Message } from "@ai-sdk/react";
+import { ThemeMode } from "@/lib/enums";
 
 interface ChatState {
   // State
@@ -37,8 +36,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   agent: null,
   agentChat: null,
   suggestions: [
-    'Weather information for any city',
-    'Local time in different locations'
+    "Weather information for any city",
+    "Local time in different locations",
   ],
   // Actions
 
@@ -56,7 +55,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   toggleTheme: () => {
     const { theme } = get();
-    const newTheme = theme === ThemeMode.DARK ? ThemeMode.LIGHT : ThemeMode.DARK;
+    const newTheme =
+      theme === ThemeMode.DARK ? ThemeMode.LIGHT : ThemeMode.DARK;
     set({ theme: newTheme });
     localStorage.setItem("theme", newTheme);
     if (newTheme === ThemeMode.DARK) {
@@ -67,14 +67,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
       document.documentElement.classList.add(ThemeMode.LIGHT);
     }
   },
-    
+
   stop: () => {
     const { agentChat } = get();
     if (agentChat?.stop) {
       agentChat.stop();
     }
   },
-    
+
   clearHistory: () => {
     const { agentChat } = get();
     if (agentChat?.clearHistory) {
@@ -86,13 +86,19 @@ export const useChatStore = create<ChatState>((set, get) => ({
 // Selectors
 export const useTitle = () => useChatStore((state) => state.title);
 export const useSuggestions = () => useChatStore((state) => state.suggestions);
-export const useSetAgentChat = () => useChatStore((state) => state.setAgentChat);
+export const useSetAgentChat = () =>
+  useChatStore((state) => state.setAgentChat);
 export const useTheme = () => useChatStore((state) => state.theme);
 export const useShowDebug = () => useChatStore((state) => state.showDebug);
-export const useMessages = () => useChatStore((state) => state.agentChat?.messages ?? []);
-export const useInput = () => useChatStore((state) => state.agentChat?.input ?? '');
-export const useIsLoading = () => useChatStore((state) => state.agentChat?.isLoading ?? false);
-export const usePendingToolCallConfirmation = () => 
+export const useMessages = () =>
+  useChatStore((state) => state.agentChat?.messages ?? []);
+export const useInput = () =>
+  useChatStore((state) => state.agentChat?.input ?? "");
+export const useIsLoading = () =>
+  useChatStore((state) => state.agentChat?.isLoading ?? false);
+export const usePendingToolCallConfirmation = () =>
   useChatStore((state) => state.pendingToolCallConfirmation);
-export const useSetPendingToolCallConfirmation = () => useChatStore((state) => state.setPendingToolCallConfirmation);
-export const useAddToolResult = () => useChatStore((state) => state.agentChat?.addToolResult);
+export const useSetPendingToolCallConfirmation = () =>
+  useChatStore((state) => state.setPendingToolCallConfirmation);
+export const useAddToolResult = () =>
+  useChatStore((state) => state.agentChat?.addToolResult);
