@@ -1,7 +1,7 @@
 import { PaperPlaneTiltIcon, StopIcon } from "@phosphor-icons/react";
 import { Textarea } from "@/components/textarea/Textarea";
 import {
-  useInput,
+  // useInput,
   useIsLoading,
   usePendingToolCallConfirmation,
   useChatStore,

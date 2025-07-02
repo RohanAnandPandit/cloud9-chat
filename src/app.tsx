@@ -28,7 +28,7 @@ export default function Chat() {
   const setAgentChat = useSetAgentChat();
   useEffect(() => {
     setAgentChat(agent, agentChat);
-  }, [agent, agentChat]);
+  }, [agent, agentChat, setAgentChat]);
 
   // Get state and actions from the store
   const messages = useMessages();

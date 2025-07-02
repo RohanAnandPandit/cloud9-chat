@@ -138,9 +138,14 @@ export async function fetchWeather({ query }: { query: string }) {
   const response = await fetch(url);
   try {
     const data: any = await response.json();
-    console.debug(data);
-    return `The weather in ${query} is ${data.current.condition.text.toLowerCase()}`;
-  } catch (error) {
+    if (
+      data?.current?.condition?.text
+    ) {
+      return `The weather in ${query} is ${data.current.condition.text.toLowerCase()}`;
+    } else {
+      throw new Error("Unexpected weather API response structure");
+    }
+  } catch (_error) {
     console.error("Error getting weather information", response.text());
     return `Error getting weather information for ${query}: ${response.text()}`;
   }
