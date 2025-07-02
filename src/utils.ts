@@ -137,19 +137,11 @@ export async function fetchWeather({ query }: { query: string }) {
   const url = `https://api.weatherapi.com/v1/current.json?q=${query}&key=${process.env.WEATHER_API_KEY}&aqi=no`;
   const response = await fetch(url);
   try {
-    const data: unknown = await response.json();
+    const data: any = await response.json();
     if (
-      typeof data === "object" &&
-      data !== null &&
-      "current" in data &&
-      typeof (data as any).current === "object" &&
-      (data as any).current !== null &&
-      "condition" in (data as any).current &&
-      typeof (data as any).current.condition === "object" &&
-      (data as any).current.condition !== null &&
-      "text" in (data as any).current.condition
+      data?.current?.condition?.text
     ) {
-      return `The weather in ${query} is ${((data as any).current.condition.text as string).toLowerCase()}`;
+      return `The weather in ${query} is ${data.current.condition.text.toLowerCase()}`;
     } else {
       throw new Error("Unexpected weather API response structure");
     }
